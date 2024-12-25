@@ -1,0 +1,29 @@
+classDiagram
+    CLIENTES <|-- PAGOS : "1"
+    PRODUCTOS <|-- PAGOS : "1"
+    
+    class CLIENTES {
+        +int id
+        +String nombre
+        +String email
+        +String direccion
+        +DateTime fecha_creacion
+    }
+    
+    class PRODUCTOS {
+        +int id
+        +String titulo
+        +String descripcion
+        +Decimal base_price
+        +int cantidad_stock
+        +String imagen_url
+    }
+    
+    class PAGOS {
+        +int id
+        +int cliente_id
+        +int producto_id
+        +Decimal total_pago
+        +String estado_pago
+        +DateTime fecha_pago
+    }

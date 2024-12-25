@@ -1,0 +1,30 @@
+erDiagram
+    CLIENTES {
+        int id PK
+        string nombre
+        string email
+        string direccion
+        datetime fecha_creacion
+    }
+
+    PRODUCTOS {
+        int id PK
+        string titulo
+        string descripcion
+        decimal base_price
+        int cantidad_stock
+        string imagen_url
+    }
+
+    PAGOS {
+        int id PK
+        int cliente_id FK
+        int producto_id FK
+        decimal total_pago
+        string estado_pago
+        datetime fecha_pago
+    }
+
+    -- Relaciones
+    CLIENTES ||--o{ PAGOS : "realiza"
+    PRODUCTOS ||--o{ PAGOS : "incluye"

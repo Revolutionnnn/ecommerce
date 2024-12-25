@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  email     String   @unique
+  direccion String
+  telefono  String?
+  pagos     Pago[]
+}
+
+model Producto {
+  id            Int      @id @default(autoincrement())
+  titulo        String
+  descripcion   String
+  basePrice     Float
+  cantidadStock Int
+  imagenUrl     String
+  pagos         Pago[]
+}
+
+model Pago {
+  id         Int      @id @default(autoincrement())
+  clienteId  Int
+  productoId Int
+  totalPago  Float
+  estadoPago EstadoPago // Usamos enum
+  fechaPago  DateTime @default(now())
+  cliente    Cliente  @relation(fields: [clienteId], references: [id])
+  producto   Producto @relation(fields: [productoId], references: [id])
+}
+
+enum EstadoPago {
+  PENDIENTE
+  PAGADO
+  RECHAZADO
+}
