@@ -23,18 +23,27 @@ model Producto {
   basePrice     Float
   cantidadStock Int
   imagenUrl     String
-  pagos         Pago[]
+  detallesPago  DetallePago[]
 }
 
 model Pago {
+  id          Int           @id @default(autoincrement())
+  clienteId   Int
+  totalPago   Float
+  estadoPago  EstadoPago
+  fechaPago   DateTime      @default(now())
+  cliente     Cliente       @relation(fields: [clienteId], references: [id])
+  detallesPago DetallePago[]
+}
+
+model DetallePago {
   id         Int      @id @default(autoincrement())
-  clienteId  Int
+  pagoId     Int
   productoId Int
-  totalPago  Float
-  estadoPago EstadoPago // Usamos enum
-  fechaPago  DateTime @default(now())
-  cliente    Cliente  @relation(fields: [clienteId], references: [id])
-  producto   Producto @relation(fields: [productoId], references: [id])
+  cantidad   Int
+  subTotal   Float
+  pago       Pago      @relation(fields: [pagoId], references: [id])
+  producto   Producto  @relation(fields: [productoId], references: [id])
 }
 
 enum EstadoPago {
