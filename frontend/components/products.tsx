@@ -1,8 +1,6 @@
 "use client";
 
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-import { Button } from "@nextui-org/button";
-import { useRouter } from "next/navigation";
 
 type Product = {
   reference: string;

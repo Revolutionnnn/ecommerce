@@ -7,11 +7,12 @@ type ConfirmationStepProps = {
   }>;
 };
 
-export const ConfirmationStep = ({ cartItems }: ConfirmationStepProps) => {
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.quantity * item.price,
-    0,
-  );
+export default function ConfirmationStep({ cartItems }: ConfirmationStepProps) {
+  if (!cartItems || cartItems.length === 0) {
+    return <p>No hay productos en el carrito para confirmar.</p>;
+  }
+
+  const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
   return (
     <div>
@@ -28,4 +29,4 @@ export const ConfirmationStep = ({ cartItems }: ConfirmationStepProps) => {
       <p className="text-lg font-bold mt-4">Total: ${total.toFixed(2)}</p>
     </div>
   );
-};
+}

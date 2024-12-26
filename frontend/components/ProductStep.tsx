@@ -1,22 +1,16 @@
-type ProductStepProps = {
-  cartItems: Array<{
-    id: string;
-    title: string;
-    quantity: number;
-    price: number;
-  }>;
-};
+import { Button } from "@nextui-org/button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-export const ProductStep = ({ cartItems }: ProductStepProps) => {
+export default function ProductStep() {
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
   return (
     <div>
       {cartItems.length > 0 ? (
         <ul>
           {cartItems.map((item) => (
-            <li
-              key={item.id}
-              className="flex justify-between items-center mb-4"
-            >
+            <li key={item.id} className="flex justify-between items-center mb-4">
               <span>{item.title}</span>
               <span>
                 {item.quantity} x ${item.price}
@@ -29,4 +23,4 @@ export const ProductStep = ({ cartItems }: ProductStepProps) => {
       )}
     </div>
   );
-};
+}

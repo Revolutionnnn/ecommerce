@@ -40,7 +40,6 @@ const products = [
 export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      {/* Texto de Introducción */}
       <div className="inline-block max-w-xl text-center justify-center">
         <span className={title()}>Compra&nbsp;</span>
         <span className={title({ color: "green" })}>fácil&nbsp;</span>
@@ -53,7 +52,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Botón "Compra ahora" */}
       <div className="flex gap-3">
         <Link
           className={buttonStyles({
@@ -61,16 +59,14 @@ export default function Home() {
             radius: "full",
             variant: "shadow",
           })}
-          href="#products" // Enlace al componente de productos
+          href="#products"
         >
           Compra ahora
         </Link>
       </div>
 
-      {/* Espacio entre el botón y los productos */}
       <div className="h-10" />
 
-      {/* Lista de Productos */}
       <div className="w-full" id="products">
         <ProductsList products={products} />
       </div>

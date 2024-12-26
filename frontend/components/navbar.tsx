@@ -14,7 +14,6 @@ import { Input } from "@nextui-org/input";
 import NextLink from "next/link";
 import { useSelector } from "react-redux";
 
-import { siteConfig } from "@/config/site";
 import { SearchIcon } from "@/components/icons";
 import { RootState } from "@/store/store";
 import { CartDropdown } from "@/components/cartDropdown";
@@ -62,32 +61,6 @@ export const Navbar = () => {
       >
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
       </NavbarContent>
-
-      <NavbarMenu>
-        {searchInput}
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                    ? "danger"
-                    : "foreground"
-                }
-                href="#"
-                size="lg"
-              >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-        </div>
-        <div className="mt-4">
-          <CartDropdown />
-        </div>
-      </NavbarMenu>
     </NextUINavbar>
   );
 };
