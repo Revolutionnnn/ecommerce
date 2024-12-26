@@ -1,8 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+
+import { addToCart } from "@/store/features/cartSlice";
+import { RootState } from "@/store/store";
 
 type ProductDetailsProps = {
   params: { reference: string };
@@ -12,7 +16,7 @@ const mockProducts = [
   {
     reference: "P123",
     title: "Product 1",
-    price: "$20",
+    price: 20,
     image: "https://via.placeholder.com/300x200",
     description: "This is an amazing product that you will love.",
     stock: 15,
@@ -20,7 +24,7 @@ const mockProducts = [
   {
     reference: "P456",
     title: "Product 2",
-    price: "$30",
+    price: 30,
     image: "https://via.placeholder.com/300x200",
     description: "High-quality product for an affordable price.",
     stock: 5,
@@ -29,8 +33,9 @@ const mockProducts = [
 
 export default function ProductDetails({ params }: ProductDetailsProps) {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  // Encuentra el producto por referencia
   const product = mockProducts.find((p) => p.reference === params.reference);
 
   if (!product) {
@@ -40,6 +45,31 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
       </div>
     );
   }
+
+  // Obtener la cantidad actual del producto en el carrito
+  const currentQuantityInCart =
+    cartItems.find((item) => item.id === product.reference)?.quantity || 0;
+
+  const handleAddToCart = (quantity: number) => {
+    const totalQuantity = currentQuantityInCart + quantity;
+
+    if (totalQuantity > product.stock) {
+      alert(
+        `No puedes agregar más de ${product.stock} unidades al carrito. Ya tienes ${currentQuantityInCart} en el carrito.`
+      );
+
+      return;
+    }
+    dispatch(
+      addToCart({
+        id: product.reference,
+        title: product.title,
+        price: product.price,
+        quantity,
+        image: product.image,
+      })
+    );
+  };
 
   return (
     <div className="flex flex-col items-center gap-6 py-10 px-4">
@@ -60,9 +90,8 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
             {product.description}
           </p>
           <p className="text-2xl font-semibold mt-4 text-primary">
-            {product.price}
+            ${product.price}
           </p>
-          {/* Stock disponible */}
           <p
             className={`text-lg mt-2 ${
               product.stock > 10 ? "text-green-600" : "text-red-600"
@@ -89,12 +118,21 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
                 type="number"
               />
             </div>
+            {/* Botones */}
             <Button
               className="w-full"
               color="primary"
               disabled={product.stock === 0}
               variant="shadow"
-              onPress={() => console.log(`Added ${product.title} to cart`)}
+              onPress={() => {
+                const quantity = parseInt(
+                  (document.getElementById("quantity") as HTMLInputElement).value
+                );
+
+                if (quantity > 0) {
+                  handleAddToCart(quantity);
+                }
+              }}
             >
               Añadir al Carrito
             </Button>
@@ -103,7 +141,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
               color="success"
               disabled={product.stock === 0}
               variant="flat"
-              onPress={() => console.log("Compra realizada")}
+              onPress={() => router.push("/summary")}
             >
               Comprar Ahora
             </Button>

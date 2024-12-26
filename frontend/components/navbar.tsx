@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -10,11 +12,16 @@ import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
 import NextLink from "next/link";
+import { useSelector } from "react-redux";
 
 import { siteConfig } from "@/config/site";
 import { SearchIcon } from "@/components/icons";
+import { RootState } from "@/store/store";
+import { CartDropdown } from "@/components/cartDropdown";
 
 export const Navbar = () => {
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -44,6 +51,9 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">ECOMMERCE</p>
           </NextLink>
         </NavbarBrand>
+        <NavbarItem>
+          <CartDropdown />
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent
@@ -63,8 +73,8 @@ export const Navbar = () => {
                   index === 2
                     ? "primary"
                     : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
+                    ? "danger"
+                    : "foreground"
                 }
                 href="#"
                 size="lg"
@@ -73,6 +83,9 @@ export const Navbar = () => {
               </Link>
             </NavbarMenuItem>
           ))}
+        </div>
+        <div className="mt-4">
+          <CartDropdown />
         </div>
       </NavbarMenu>
     </NextUINavbar>
