@@ -10,7 +10,7 @@ datasource db {
 model Cliente {
   id        Int      @id @default(autoincrement())
   nombre    String
-  email     String   @unique
+  email     String
   direccion String
   telefono  String?
   pagos     Pago[]
