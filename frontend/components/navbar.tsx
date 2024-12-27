@@ -3,23 +3,16 @@
 import {
   Navbar as NextUINavbar,
   NavbarContent,
-  NavbarMenu,
   NavbarBrand,
   NavbarItem,
-  NavbarMenuItem,
 } from "@nextui-org/navbar";
 import { Kbd } from "@nextui-org/kbd";
-import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
 import NextLink from "next/link";
-import { useSelector } from "react-redux";
 
-import { SearchIcon } from "@/components/icons";
-import { RootState } from "@/store/store";
 import { CartDropdown } from "@/components/cartDropdown";
 
 export const Navbar = () => {
-  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const searchInput = (
     <Input
@@ -35,9 +28,6 @@ export const Navbar = () => {
       }
       labelPlacement="outside"
       placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
       type="search"
     />
   );

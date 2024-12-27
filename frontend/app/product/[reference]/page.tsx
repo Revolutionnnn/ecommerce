@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { use } from "react";
 
 import { addToCart } from "@/store/features/cartSlice";
 import { RootState } from "@/store/store";
 
 type ProductDetailsProps = {
-  params: { reference: string };
+  params: Promise<{ reference: string }>; // `params` es ahora un Promise
 };
 
 const mockProducts = [
@@ -36,7 +37,11 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  const product = mockProducts.find((p) => p.reference === params.reference);
+  // Desempaqueta `params` usando `use()`
+  const { reference } = use(params);
+
+  // Encuentra el producto usando `reference`
+  const product = mockProducts.find((p) => p.reference === reference);
 
   if (!product) {
     return (
@@ -46,7 +51,6 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     );
   }
 
-  // Obtener la cantidad actual del producto en el carrito
   const currentQuantityInCart =
     cartItems.find((item) => item.id === product.reference)?.quantity || 0;
 
@@ -57,7 +61,6 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
       alert(
         `No puedes agregar más de ${product.stock} unidades al carrito. Ya tienes ${currentQuantityInCart} en el carrito.`
       );
-
       return;
     }
     dispatch(
@@ -75,20 +78,15 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     <div className="flex flex-col items-center gap-6 py-10 px-4">
       <Card className="w-full max-w-lg shadow-lg">
         <CardBody className="flex flex-col items-center">
-          {/* Imagen centrada */}
           <Image
             alt={product.title}
             className="rounded-lg"
             height={200}
-            objectFit="cover"
             src={product.image}
             width={300}
           />
-          {/* Título y descripción */}
           <h1 className="text-3xl font-bold mt-4">{product.title}</h1>
-          <p className="text-gray-500 mt-2 text-center">
-            {product.description}
-          </p>
+          <p className="text-gray-500 mt-2 text-center">{product.description}</p>
           <p className="text-2xl font-semibold mt-4 text-primary">
             ${product.price}
           </p>
@@ -118,7 +116,6 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
                 type="number"
               />
             </div>
-            {/* Botones */}
             <Button
               className="w-full"
               color="primary"
@@ -128,7 +125,6 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
                 const quantity = parseInt(
                   (document.getElementById("quantity") as HTMLInputElement).value
                 );
-
                 if (quantity > 0) {
                   handleAddToCart(quantity);
                 }
@@ -148,7 +144,6 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
           </div>
         </CardFooter>
       </Card>
-      {/* Botón para volver */}
       <Button onPress={() => router.back()}>Volver</Button>
     </div>
   );

@@ -14,8 +14,11 @@ type CartState = {
 
 const loadCartFromLocalStorage = (): CartState => {
   try {
-    const serializedState = localStorage.getItem("cart");
+    if (typeof window === "undefined") {
+      return { items: [] };
+    }
 
+    const serializedState = localStorage.getItem("cart");
     if (serializedState === null) {
       return { items: [] };
     }
@@ -30,6 +33,7 @@ const loadCartFromLocalStorage = (): CartState => {
     return { items: [] };
   }
 };
+
 
 const saveCartToLocalStorage = (state: CartState) => {
   try {

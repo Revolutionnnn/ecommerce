@@ -1,6 +1,8 @@
 "use client";
 
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { Button } from "@nextui-org/button";
 
 type Product = {
   reference: string;
@@ -21,10 +23,9 @@ export const ProductsList = ({ products }: ProductsListProps) => {
       {products.map((product) => (
         <Card
           key={product.reference}
-          isPressable
-          className="transition-transform hover:scale-105"
+          className="transition-transform hover:scale-105 cursor-pointer"
           shadow="sm"
-          onPress={() => router.push(`/product/${product.reference}`)} // Redirige a la página de detalles
+          onClick={() => router.push(`/product/${product.reference}`)} // Redirige a la página de detalles
         >
           <CardBody className="overflow-visible p-0">
             <Image

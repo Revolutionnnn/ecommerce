@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Dropdown,
@@ -13,7 +14,13 @@ import { removeFromCart } from "@/store/features/cartSlice";
 
 export const CartDropdown = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const cartItemsFromRedux = useSelector((state: RootState) => state.cart.items); // Llama useSelector en el cuerpo del componente
+  const [cartItems, setCartItems] = useState<any[] | null>(null);
+
+  useEffect(() => {
+    // Sincroniza el estado local con el estado de Redux
+    setCartItems(cartItemsFromRedux);
+  }, [cartItemsFromRedux]);
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeFromCart(id));
@@ -29,13 +36,42 @@ export const CartDropdown = () => {
       onClick={onClick}
     >
       <path
-        d="M19 7L5 7M10 11v6m4-6v6m-7 4h10a2 2 0 002-2V7H5v11a2 2 0 002 2zm3-16h4a2 2 0 012 2v1H9V3a2 2 0 012-2z"
+        d="M19 7L5 7M10 11v6m4-6v6m-7 4h10a2 2V7H5v11a2 2 0 002 2zm3-16h4a2 2v1H9V3a2 2 0 012-2z"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
       />
     </svg>
   );
+
+  if (cartItems === null) {
+    // Muestra un estado de carga mientras se inicializa el carrito
+    return (
+      <Dropdown>
+        <DropdownTrigger>
+          <div className="relative cursor-pointer">
+            <svg
+              className="h-6 w-6 text-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 3h18l-2 13H5L3 3zm7 13a3 3 0 106 0m-6 0H5m7 0h5"
+              />
+            </svg>
+          </div>
+        </DropdownTrigger>
+        <DropdownMenu>
+          <DropdownItem>Cargando carrito...</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    );
+  }
 
   return (
     <Dropdown>
@@ -64,26 +100,24 @@ export const CartDropdown = () => {
       </DropdownTrigger>
       <DropdownMenu aria-label="Carrito">
         {cartItems.length > 0 ? (
-          <>
-            {cartItems.map((item) => (
-              <DropdownItem key={item.id}>
-                <div className="flex items-center gap-3">
-                  <img
-                    alt={item.title}
-                    className="w-12 h-12 rounded-md object-cover"
-                    src={item.image}
-                  />
-                  <div className="flex-1">
-                    <p className="font-bold text-sm">{item.title}</p>
-                    <p className="text-sm text-gray-600">
-                      Cantidad: {item.quantity}
-                    </p>
-                  </div>
-                  <TrashIcon onClick={() => handleRemoveItem(item.id)} />
+          cartItems.map((item) => (
+            <DropdownItem key={item.id}>
+              <div className="flex items-center gap-3">
+                <img
+                  alt={item.title}
+                  className="w-12 h-12 rounded-md object-cover"
+                  src={item.image}
+                />
+                <div className="flex-1">
+                  <p className="font-bold text-sm">{item.title}</p>
+                  <p className="text-sm text-gray-600">
+                    Cantidad: {item.quantity}
+                  </p>
                 </div>
-              </DropdownItem>
-            ))}
-          </>
+                <TrashIcon onClick={() => handleRemoveItem(item.id)} />
+              </div>
+            </DropdownItem>
+          ))
         ) : (
           <DropdownItem key={""} className="text-center">
             El carrito está vacío
