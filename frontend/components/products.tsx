@@ -20,12 +20,12 @@ export const ProductsList = ({ products }: ProductsListProps) => {
 
   return (
     <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {products.map((product) => (
+      {products.map((product, index) => (
         <Card
-          key={product.reference}
+          key={`${product.reference}-${index}`}
           className="transition-transform hover:scale-105 cursor-pointer"
           shadow="sm"
-          onClick={() => router.push(`/product/${product.reference}`)} // Redirige a la página de detalles
+          onClick={() => router.push(`/product/${product.reference}`)}
         >
           <CardBody className="overflow-visible p-0">
             <Image

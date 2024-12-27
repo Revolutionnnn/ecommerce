@@ -2,42 +2,23 @@
 
 import { Link } from "@nextui-org/link";
 import { button as buttonStyles } from "@nextui-org/theme";
-
 import { ProductsList } from "@/components/products";
 import { title, subtitle } from "@/components/primitives";
-
-const products = [
-  {
-    reference: "P123",
-    title: "Product 1",
-    price: "$20",
-    image: "https://via.placeholder.com/300x200",
-    description: "This is an amazing product that you will love.",
-  },
-  {
-    reference: "P456",
-    title: "Product 2",
-    price: "$30",
-    image: "https://via.placeholder.com/300x200",
-    description: "High-quality product for an affordable price.",
-  },
-  {
-    reference: "P789",
-    title: "Product 3",
-    price: "$40",
-    image: "https://via.placeholder.com/300x200",
-    description: "A product that combines style and functionality.",
-  },
-  {
-    reference: "P101",
-    title: "Product 4",
-    price: "$50",
-    image: "https://via.placeholder.com/300x200",
-    description: "Perfect for everyday use, highly recommended.",
-  },
-];
+import { useEffect, useState } from "react";
+import { getProducts } from "@/services/products";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const data = await getProducts();
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-xl text-center justify-center">
@@ -68,7 +49,11 @@ export default function Home() {
       <div className="h-10" />
 
       <div className="w-full" id="products">
-        <ProductsList products={products} />
+        {products.length > 0 ? (
+          <ProductsList products={products} />
+        ) : (
+          <p className="text-center text-gray-500">Cargando productos...</p>
+        )}
       </div>
     </section>
   );

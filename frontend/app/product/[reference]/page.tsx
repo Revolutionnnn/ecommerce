@@ -37,10 +37,8 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  // Desempaqueta `params` usando `use()`
   const { reference } = use(params);
 
-  // Encuentra el producto usando `reference`
   const product = mockProducts.find((p) => p.reference === reference);
 
   if (!product) {
