@@ -80,9 +80,9 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     }
     dispatch(
       addToCart({
-        id: product.reference,
+        id: product.id,
         title: product.titulo,
-        price: product.price,
+        price: product.basePrice,
         quantity,
         image: product.imagenUrl,
       })
@@ -103,7 +103,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
           <h1 className="text-3xl font-bold mt-4">{product.titulo}</h1>
           <p className="text-gray-500 mt-2 text-center">{product.description}</p>
           <p className="text-2xl font-semibold mt-4 text-primary">
-            ${product.price}
+            ${product.basePrice}
           </p>
           <p
             className={`text-lg mt-2 ${

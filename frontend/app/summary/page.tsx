@@ -16,6 +16,7 @@ export default function SummaryPage() {
 
   const steps = ["Productos y Datos", "Método de Pago", "Confirmación"];
   const [activeStep, setActiveStep] = useState(0);
+  const [errors, setErrors] = useState<any>({});
 
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
@@ -30,7 +31,6 @@ export default function SummaryPage() {
     cvc: "",
   });
 
-  const [errors] = useState<any>({});
   const [cardType, setCardType] = useState<string | null>(null);
 
   const total = cartItems.reduce(
@@ -42,10 +42,67 @@ export default function SummaryPage() {
     setCardInfo({ ...cardInfo, number: value });
     const validation = cardValidator.number(value);
 
+    if (!validation.isValid) {
+      setErrors({ ...errors, cardNumber: "Número de tarjeta no válido." });
+    } else {
+      setErrors({ ...errors, cardNumber: null });
+    }
+
     setCardType(validation.card?.type || null);
   };
 
+
   const handleNext = () => {
+    let hasErrors = false;
+    const newErrors: any = {};
+
+    if (
+      !customerInfo.name ||
+      customerInfo.name.length < 1 ||
+      customerInfo.name.length > 50
+    ) {
+      newErrors.name = "El nombre debe tener entre 1 y 50 caracteres.";
+      hasErrors = true;
+    }
+
+    if (
+      !customerInfo.address ||
+      customerInfo.address.length < 1 ||
+      customerInfo.address.length > 50
+    ) {
+      newErrors.address = "La dirección debe tener entre 1 y 50 caracteres.";
+      hasErrors = true;
+    }
+
+    if (
+      !/^\d+$/.test(customerInfo.phone) ||
+      customerInfo.phone.length < 7 ||
+      customerInfo.phone.length > 15
+    ) {
+      newErrors.phone = "El teléfono debe ser un número y tener entre 7 y 15 dígitos.";
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      setErrors(newErrors);
+
+      return;
+    }
+
+    if (activeStep === steps.length - 1) {
+      const fullData = {
+        customerInfo,
+        cartItems,
+        total,
+        cardInfo,
+      };
+
+      console.log("Resumen completo:", fullData);
+
+      return;
+    }
+
+    setErrors({});
     setActiveStep((prev) => prev + 1);
   };
 
