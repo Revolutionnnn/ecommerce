@@ -14,11 +14,12 @@ import { removeFromCart } from "@/store/features/cartSlice";
 
 export const CartDropdown = () => {
   const dispatch = useDispatch();
-  const cartItemsFromRedux = useSelector((state: RootState) => state.cart.items); // Llama useSelector en el cuerpo del componente
+  const cartItemsFromRedux = useSelector(
+    (state: RootState) => state.cart.items,
+  );
   const [cartItems, setCartItems] = useState<any[] | null>(null);
 
   useEffect(() => {
-    // Sincroniza el estado local con el estado de Redux
     setCartItems(cartItemsFromRedux);
   }, [cartItemsFromRedux]);
 
@@ -45,7 +46,6 @@ export const CartDropdown = () => {
   );
 
   if (cartItems === null) {
-    // Muestra un estado de carga mientras se inicializa el carrito
     return (
       <Dropdown>
         <DropdownTrigger>
@@ -100,8 +100,8 @@ export const CartDropdown = () => {
       </DropdownTrigger>
       <DropdownMenu aria-label="Carrito">
         {cartItems.length > 0 ? (
-          cartItems.map((item) => (
-            <DropdownItem key={item.id}>
+          cartItems.map((item, index) => (
+            <DropdownItem key={item.id || `item-${index}`}>
               <div className="flex items-center gap-3">
                 <img
                   alt={item.title}
@@ -119,7 +119,7 @@ export const CartDropdown = () => {
             </DropdownItem>
           ))
         ) : (
-          <DropdownItem key={""} className="text-center">
+          <DropdownItem key="empty-cart" className="text-center">
             El carrito está vacío
           </DropdownItem>
         )}

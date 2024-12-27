@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/button";
 
 type Product = {
-  reference: string;
+  id: string;
   title: string;
   price: string;
   image: string;
@@ -22,10 +22,10 @@ export const ProductsList = ({ products }: ProductsListProps) => {
     <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((product, index) => (
         <Card
-          key={`${product.reference}-${index}`}
+          key={`${product.id}-${index}`}
           className="transition-transform hover:scale-105 cursor-pointer"
           shadow="sm"
-          onClick={() => router.push(`/product/${product.reference}`)}
+          onClick={() => router.push(`/product/${product.id}`)}
         >
           <CardBody className="overflow-visible p-0">
             <Image
@@ -46,7 +46,7 @@ export const ProductsList = ({ products }: ProductsListProps) => {
               className="w-full"
               color="success"
               variant="shadow"
-              onPress={() => router.push(`/product/${product.reference}`)}
+              onPress={() => router.push(`/product/${product.id}`)}
             >
               Comprar
             </Button>
