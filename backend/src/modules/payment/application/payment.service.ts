@@ -129,6 +129,7 @@ export class PaymentService {
     });
 
     let totalPago = 0;
+    const deliveryCost = 10000;
     for (const item of paymentRequest.cartItems) {
       const producto = await this.paymentRepository.getProductById(item.id);
 
@@ -146,7 +147,7 @@ export class PaymentService {
         );
       }
 
-      totalPago += producto.basePrice * item.quantity;
+      totalPago += producto.basePrice * item.quantity + deliveryCost;
     }
 
     const reference = uuidv4();
