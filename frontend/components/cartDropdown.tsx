@@ -15,7 +15,7 @@ import { removeFromCart } from "@/store/features/cartSlice";
 export const CartDropdown = () => {
   const dispatch = useDispatch();
   const cartItemsFromRedux = useSelector(
-    (state: RootState) => state.cart.items,
+    (state: RootState) => state.cart.items
   );
   const [cartItems, setCartItems] = useState<any[] | null>(null);
 
@@ -58,16 +58,16 @@ export const CartDropdown = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
+                d="M3 3h18l-2 13H5L3 3zm7 13a3 3 0 106 0m-6 0H5m7 0h5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M3 3h18l-2 13H5L3 3zm7 13a3 3 0 106 0m-6 0H5m7 0h5"
               />
             </svg>
           </div>
         </DropdownTrigger>
         <DropdownMenu>
-          <DropdownItem>Cargando carrito...</DropdownItem>
+          <DropdownItem key={""}>Cargando carrito...</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );
@@ -103,11 +103,15 @@ export const CartDropdown = () => {
           cartItems.map((item, index) => (
             <DropdownItem key={item.id || `item-${index}`}>
               <div className="flex items-center gap-3">
-                <img
-                  alt={item.title}
-                  className="w-12 h-12 rounded-md object-cover"
-                  src={item.image}
-                />
+                {item.image ? (
+                  <img
+                    alt={item.title}
+                    className="w-12 h-12 rounded-md object-cover"
+                    src={item.image}
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-md bg-gray-200 animate-pulse flex items-center justify-center" />
+                )}
                 <div className="flex-1">
                   <p className="font-bold text-sm">{item.title}</p>
                   <p className="text-sm text-gray-600">
