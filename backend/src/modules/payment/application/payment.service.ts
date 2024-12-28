@@ -20,7 +20,9 @@ export class PaymentService {
   ) {
     this.wompiBaseUrl = this.configService.get<string>('WOMPI_API_BASE_URL');
     this.wompiPublicKey = this.configService.get<string>('WOMPI_PUBLIC_KEY');
-    this.wompiIntegrityKey = this.configService.get<string>('WOMPI_INTEGRITY_KEY');
+    this.wompiIntegrityKey = this.configService.get<string>(
+      'WOMPI_INTEGRITY_KEY',
+    );
     this.currency = this.configService.get<string>('CURRENCY');
   }
 
