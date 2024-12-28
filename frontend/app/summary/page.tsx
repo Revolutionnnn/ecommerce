@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 import { Button } from "@nextui-org/button";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
 import { useSelector } from "react-redux";
 import cardValidator from "card-validator";
 
@@ -10,6 +18,7 @@ import Stepper from "@/components/stepper";
 import CustomerInfoStep from "@/components/customerInfoStep";
 import PaymentMethodStep from "@/components/paymentMethodStep";
 import ConfirmationStep from "@/components/confirmationStep";
+import { makePayment } from "@/services/payment";
 
 export default function SummaryPage() {
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -17,25 +26,27 @@ export default function SummaryPage() {
   const steps = ["Productos y Datos", "Método de Pago", "Confirmación"];
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState<any>({});
-
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     address: "",
     phone: "",
+    email: "",
+    paymentMethod: "creditCard",
   });
-
   const [cardInfo, setCardInfo] = useState({
     number: "",
     expMonth: "",
     expYear: "",
     cvc: "",
   });
-
   const [cardType, setCardType] = useState<string | null>(null);
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [modalMessage, setModalMessage] = useState("Pendiente...");
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.quantity * item.price,
-    0,
+    0
   );
 
   const handleCardNumberChange = (value: string) => {
@@ -51,8 +62,7 @@ export default function SummaryPage() {
     setCardType(validation.card?.type || null);
   };
 
-
-  const handleNext = () => {
+  const handleNext = async () => {
     let hasErrors = false;
     const newErrors: any = {};
 
@@ -79,7 +89,21 @@ export default function SummaryPage() {
       customerInfo.phone.length < 7 ||
       customerInfo.phone.length > 15
     ) {
-      newErrors.phone = "El teléfono debe ser un número y tener entre 7 y 15 dígitos.";
+      newErrors.phone =
+        "El teléfono debe ser un número y tener entre 7 y 15 dígitos.";
+      hasErrors = true;
+    }
+
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerInfo.email) ||
+      customerInfo.email.length > 50
+    ) {
+      newErrors.email = "Por favor ingrese un correo electrónico válido.";
+      hasErrors = true;
+    }
+
+    if (!customerInfo.paymentMethod) {
+      newErrors.paymentMethod = "Por favor seleccione un método de pago.";
       hasErrors = true;
     }
 
@@ -90,14 +114,36 @@ export default function SummaryPage() {
     }
 
     if (activeStep === steps.length - 1) {
-      const fullData = {
-        customerInfo,
-        cartItems,
-        total,
-        cardInfo,
-      };
+      onOpen();
+      setModalMessage("Procesando compra...");
 
-      console.log("Resumen completo:", fullData);
+      try {
+        const filteredCartItems = cartItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+        }));
+
+        const fullData = {
+          number: cardInfo.number,
+          expMonth: cardInfo.expMonth,
+          expYear: cardInfo.expYear,
+          cvc: cardInfo.cvc,
+          customerInfo: {
+            name: customerInfo.name,
+            address: customerInfo.address,
+            phone: customerInfo.phone,
+            email: customerInfo.email || "correo@example.com",
+          },
+          cartItems: filteredCartItems,
+          total,
+        };
+
+        const result = await makePayment(fullData);
+
+        setModalMessage(result.message);
+      } catch (error) {
+        setModalMessage("Hubo un problema inesperado.");
+      }
 
       return;
     }
@@ -151,6 +197,26 @@ export default function SummaryPage() {
           {activeStep === steps.length - 1 ? "Confirmar Compra" : "Siguiente"}
         </Button>
       </div>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                {modalMessage.includes("éxito") ? "Éxito" : "Procesando"}
+              </ModalHeader>
+              <ModalBody>
+                <p>{modalMessage}</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cerrar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

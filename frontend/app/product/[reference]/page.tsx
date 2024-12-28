@@ -19,7 +19,17 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  const [product, setProduct] = useState(null);
+  type Product = {
+    id: string;
+    reference: string;
+    titulo: string;
+    basePrice: number;
+    imagenUrl: string;
+    description: string;
+    cantidadStock: number;
+  };
+  
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [reference, setReference] = useState<string | null>(null);
 
@@ -27,6 +37,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     const fetchParams = async () => {
       try {
         const resolvedParams = await params;
+
         setReference(resolvedParams.reference);
       } catch (error) {
         console.error("Error resolving params:", error);
@@ -43,6 +54,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
       try {
         setLoading(true);
         const data = await getProductById(reference);
+
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -139,8 +151,9 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
               onPress={() => {
                 const quantity = parseInt(
                   (document.getElementById("quantity") as HTMLInputElement)
-                    .value
+                    .value,
                 );
+
                 if (quantity > 0) {
                   handleAddToCart(quantity);
                 }

@@ -77,7 +77,6 @@ export class PaymentService {
       exp_year: cardInfo.expYear,
       card_holder: cardInfo.cardHolder,
     };
-
     try {
       const response = await axios.post(url, payload, {
         headers: {
@@ -85,14 +84,12 @@ export class PaymentService {
           'Content-Type': 'application/json',
         },
       });
-
       if (response.data.status !== 'CREATED') {
         throw new HttpException(
           `Error al obtener el token de la tarjeta: ${response.data.message}`,
           HttpStatus.BAD_REQUEST,
         );
       }
-
       return response.data.data.id;
     } catch (error) {
       throw new HttpException(
