@@ -33,6 +33,7 @@ export class PaymentRepository {
     productoId: number;
     cantidad: number;
     subTotal: number;
+    transactionId: string;
   }) {
     return this.prisma.detallePago.create({
       data: detalleData,

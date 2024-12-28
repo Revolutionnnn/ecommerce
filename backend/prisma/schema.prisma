@@ -37,13 +37,14 @@ model Pago {
 }
 
 model DetallePago {
-  id         Int      @id @default(autoincrement())
-  pagoId     Int
-  productoId Int
-  cantidad   Int
-  subTotal   Float
-  pago       Pago      @relation(fields: [pagoId], references: [id])
-  producto   Producto  @relation(fields: [productoId], references: [id])
+  id            Int      @id @default(autoincrement())
+  pagoId        Int
+  productoId    Int
+  cantidad      Int
+  subTotal      Float
+  transactionId String?  @unique
+  pago          Pago     @relation(fields: [pagoId], references: [id])
+  producto      Producto @relation(fields: [productoId], references: [id])
 }
 
 enum EstadoPago {
