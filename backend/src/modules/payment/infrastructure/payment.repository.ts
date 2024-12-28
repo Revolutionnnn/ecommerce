@@ -24,6 +24,7 @@ export class PaymentRepository {
         totalPago: payment.totalPago,
         estadoPago: payment.estadoPago,
         fechaPago: payment.fechaPago,
+        transactionId: payment.transactionId,
       },
     });
   }
@@ -33,7 +34,6 @@ export class PaymentRepository {
     productoId: number;
     cantidad: number;
     subTotal: number;
-    transactionId: string;
   }) {
     return this.prisma.detallePago.create({
       data: detalleData,

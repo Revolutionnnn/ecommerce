@@ -31,6 +31,7 @@ model Pago {
   clienteId   Int
   totalPago   Float
   estadoPago  EstadoPago
+  transactionId String?  @unique
   fechaPago   DateTime      @default(now())
   cliente     Cliente       @relation(fields: [clienteId], references: [id])
   detallesPago DetallePago[]
@@ -42,7 +43,6 @@ model DetallePago {
   productoId    Int
   cantidad      Int
   subTotal      Float
-  transactionId String?  @unique
   pago          Pago     @relation(fields: [pagoId], references: [id])
   producto      Producto @relation(fields: [productoId], references: [id])
 }

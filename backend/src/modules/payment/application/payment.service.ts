@@ -201,7 +201,12 @@ export class PaymentService {
       });
 
       if (transactionStatus === 'APPROVED') {
-        const payment = new Payment(cliente.id, totalPago, 'PAGADO');
+        const payment = new Payment(
+          cliente.id,
+          totalPago,
+          transactionId,
+          'PAGADO',
+        );
         const savedPayment =
           await this.paymentRepository.createPayment(payment);
 
@@ -215,7 +220,6 @@ export class PaymentService {
             productoId: producto.id,
             cantidad: item.quantity,
             subTotal,
-            transactionId,
           });
 
           await this.paymentRepository.updateProductStock(
