@@ -19,6 +19,7 @@ const loadCartFromLocalStorage = (): CartState => {
     }
 
     const serializedState = localStorage.getItem("cart");
+
     if (serializedState === null) {
       return { items: [] };
     }

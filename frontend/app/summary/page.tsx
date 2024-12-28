@@ -12,6 +12,8 @@ import {
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
 import cardValidator from "card-validator";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 import { RootState } from "@/store/store";
 import Stepper from "@/components/stepper";
@@ -19,9 +21,12 @@ import CustomerInfoStep from "@/components/customerInfoStep";
 import PaymentMethodStep from "@/components/paymentMethodStep";
 import ConfirmationStep from "@/components/confirmationStep";
 import { makePayment } from "@/services/payment";
+import { clearCart } from "@/store/features/cartSlice";
 
 export default function SummaryPage() {
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const steps = ["Productos y Datos", "Método de Pago", "Confirmación"];
   const [activeStep, setActiveStep] = useState(0);
@@ -46,7 +51,7 @@ export default function SummaryPage() {
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.quantity * item.price,
-    0
+    0,
   );
 
   const handleCardNumberChange = (value: string) => {
@@ -141,6 +146,12 @@ export default function SummaryPage() {
         const result = await makePayment(fullData);
 
         setModalMessage(result.message);
+        if (result.success) {
+          dispatch(clearCart());
+          setTimeout(() => {
+            router.push("/");
+          }, 2000);
+        }
       } catch (error) {
         setModalMessage("Hubo un problema inesperado.");
       }
