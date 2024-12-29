@@ -26,6 +26,7 @@ export const ProductsList = ({ products }: ProductsListProps) => {
           className="transition-transform hover:scale-105 cursor-pointer"
           shadow="sm"
           onPress={() => router.push(`/product/${product.id}`)}
+          aria-label={`Ver detalles del producto ${product.titulo}`}
         >
           <CardBody className="overflow-visible p-0">
             <Image

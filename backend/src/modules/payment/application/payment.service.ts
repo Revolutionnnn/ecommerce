@@ -163,7 +163,7 @@ export class PaymentService {
       customer_email: paymentRequest.customerInfo.email,
       payment_method: {
         type: 'CARD',
-        installments: 1,
+        installments: paymentRequest.installments,
         token: cardToken,
       },
     };

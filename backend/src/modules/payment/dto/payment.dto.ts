@@ -67,6 +67,9 @@ export class PaymentRequestDto {
   cvc: string;
 
   @IsNotEmpty()
+  installments: number;
+
+  @IsNotEmpty()
   customerInfo: CustomerInfoDto;
 
   @IsArray()

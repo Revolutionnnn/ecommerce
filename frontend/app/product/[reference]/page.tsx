@@ -28,7 +28,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     description: string;
     cantidadStock: number;
   };
-  
+
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [reference, setReference] = useState<string | null>(null);
@@ -88,6 +88,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
       alert(
         `No puedes agregar más de ${product.cantidadStock} unidades al carrito. Ya tienes ${currentQuantityInCart} en el carrito.`
       );
+
       return;
     }
     dispatch(

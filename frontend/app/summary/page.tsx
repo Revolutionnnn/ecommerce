@@ -43,6 +43,7 @@ export default function SummaryPage() {
     expMonth: "",
     expYear: "",
     cvc: "",
+    installments: 1,
   });
   const [cardType, setCardType] = useState<string | null>(null);
 
@@ -146,6 +147,7 @@ export default function SummaryPage() {
           expMonth: cardInfo.expMonth,
           expYear: cardInfo.expYear,
           cvc: cardInfo.cvc,
+          installments: cardInfo.installments,
           customerInfo: {
             name: customerInfo.name,
             address: customerInfo.address,
@@ -155,6 +157,7 @@ export default function SummaryPage() {
           cartItems: filteredCartItems,
           total,
         };
+
 
         const result = await makePayment(fullData);
 
