@@ -97,7 +97,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
         price: product.basePrice,
         quantity,
         image: product.imagenUrl,
-      })
+      }),
     );
   };
 
@@ -109,11 +109,13 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
             alt={product.titulo}
             className="rounded-lg"
             height={200}
-            src={product.imagenUrl || null}
+            src={product.imagenUrl || undefined}
             width={300}
           />
           <h1 className="text-3xl font-bold mt-4">{product.titulo}</h1>
-          <p className="text-gray-500 mt-2 text-center">{product.description}</p>
+          <p className="text-gray-500 mt-2 text-center">
+            {product.description}
+          </p>
           <p className="text-2xl font-semibold mt-4 text-primary">
             ${product.basePrice}
           </p>

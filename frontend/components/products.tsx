@@ -6,9 +6,9 @@ import { Button } from "@nextui-org/button";
 
 type Product = {
   id: string;
-  title: string;
-  price: string;
-  image: string;
+  titulo: string;
+  basePrice: string;
+  imagenUrl: string;
 };
 
 type ProductsListProps = {
@@ -29,18 +29,23 @@ export const ProductsList = ({ products }: ProductsListProps) => {
         >
           <CardBody className="overflow-visible p-0">
             <Image
-              alt={product.title}
+              alt={product.titulo}
               className="w-full object-cover h-[200px]"
               radius="lg"
               shadow="sm"
-              src={product.image}
+              src={product.imagenUrl || undefined}
               width="100%"
             />
           </CardBody>
           <CardFooter className="flex flex-col items-center gap-2">
             <div className="w-full flex justify-between items-center">
-              <b>{product.title}</b>
-              <p className="text-default-500">{product.price}</p>
+              <b>{product.titulo}</b>
+              <p className="text-default-500">
+                {new Intl.NumberFormat("es-ES", {
+                  style: "currency",
+                  currency: "COP",
+                }).format(Number(product.basePrice))}
+              </p>
             </div>
             <Button
               key={`${product.id}-${index}`}
