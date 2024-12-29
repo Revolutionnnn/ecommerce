@@ -25,7 +25,7 @@ export const ProductsList = ({ products }: ProductsListProps) => {
           key={`${product.id}-${index}`}
           className="transition-transform hover:scale-105 cursor-pointer"
           shadow="sm"
-          onClick={() => router.push(`/product/${product.id}`)}
+          onPress={() => router.push(`/product/${product.id}`)}
         >
           <CardBody className="overflow-visible p-0">
             <Image
@@ -43,6 +43,7 @@ export const ProductsList = ({ products }: ProductsListProps) => {
               <p className="text-default-500">{product.price}</p>
             </div>
             <Button
+              key={`${product.id}-${index}`}
               className="w-full"
               color="success"
               variant="shadow"

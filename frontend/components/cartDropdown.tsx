@@ -18,6 +18,7 @@ export const CartDropdown = () => {
     (state: RootState) => state.cart.items
   );
   const [cartItems, setCartItems] = useState<any[] | null>(null);
+  const [isOpen, setIsOpen] = useState(false); // Usamos el estado aquí
 
   useEffect(() => {
     setCartItems(cartItemsFromRedux);
@@ -45,38 +46,14 @@ export const CartDropdown = () => {
     </svg>
   );
 
-  if (cartItems === null) {
-    return (
-      <Dropdown>
-        <DropdownTrigger>
-          <div className="relative cursor-pointer">
-            <svg
-              className="h-6 w-6 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3 3h18l-2 13H5L3 3zm7 13a3 3 0 106 0m-6 0H5m7 0h5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
-          </div>
-        </DropdownTrigger>
-        <DropdownMenu>
-          <DropdownItem key={""}>Cargando carrito...</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    );
-  }
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev); // Alternar el estado de apertura
+  };
 
   return (
-    <Dropdown>
+    <Dropdown isOpen={isOpen} onOpenChange={toggleDropdown}>
       <DropdownTrigger>
-        <div className="relative cursor-pointer">
+        <div className="relative cursor-pointer" role="button" tabIndex={0}>
           <svg
             className="h-6 w-6 text-primary"
             fill="none"
@@ -85,13 +62,13 @@ export const CartDropdown = () => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M3 3h18l-2 13H5L3 3zm7 13a3 3 0 106 0m-6 0H5m7 0h5"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M3 3h18l-2 13H5L3 3zm7 13a3 3 0 106 0m-6 0H5m7 0h5"
             />
           </svg>
-          {cartItems.length > 0 && (
+          {cartItems?.length > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
               {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
             </span>
@@ -99,7 +76,7 @@ export const CartDropdown = () => {
         </div>
       </DropdownTrigger>
       <DropdownMenu aria-label="Carrito">
-        {cartItems.length > 0 ? (
+        {cartItems?.length > 0 ? (
           cartItems.map((item, index) => (
             <DropdownItem key={item.id || `item-${index}`}>
               <div className="flex items-center gap-3">
