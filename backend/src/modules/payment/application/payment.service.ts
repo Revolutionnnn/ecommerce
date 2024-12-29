@@ -240,7 +240,7 @@ export class PaymentService {
       }
     } catch (error) {
       throw new HttpException(
-        `Error procesando el pago: ${error.response?.data?.message || error.message}`,
+        `${error.response?.data?.message || error.message}`,
         HttpStatus.BAD_REQUEST,
       );
     }

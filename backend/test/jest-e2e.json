@@ -1,9 +1,17 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": ".",
+  "rootDir": "../",  // Asegúrate de que apunta al directorio raíz
   "testEnvironment": "node",
-  "testRegex": ".e2e-spec.ts$",
+  "testRegex": ".*\\.e2e-spec\\.ts$", // Coincide con todos los archivos .e2e-spec.ts
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
+  "collectCoverageFrom": [
+    "src/modules/**/*.ts",        // Incluye todos los archivos relevantes
+    "!src/main.ts",               // Excluye main.ts
+    "!src/**/*.module.ts",        // Excluye módulos
+    "!src/**/*.e2e-spec.ts"       // Excluye archivos de prueba
+  ],
+  "coverageDirectory": "./coverage-e2e" // Directorio para el reporte de cobertura
 }
