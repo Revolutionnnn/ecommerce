@@ -5,6 +5,9 @@ const ConfirmationStep = ({
   customerInfo: any;
   total: number;
 }) => {
+  const shippingCost = 10000;
+  const grandTotal = total + shippingCost;
+
   return (
     <div>
       <h2 className="text-lg font-bold mb-4">Confirmación</h2>
@@ -17,9 +20,17 @@ const ConfirmationStep = ({
       <p>
         <strong>Teléfono:</strong> {customerInfo.phone}
       </p>
-      <p className="mt-4">
-        <strong>Total:</strong> ${total.toFixed(2)}
-      </p>
+      <div className="mt-4">
+        <p>
+          <strong>Subtotal:</strong> ${total.toFixed(2)}
+        </p>
+        <p>
+          <strong>Costo de envío:</strong> ${shippingCost.toFixed(2)}
+        </p>
+        <p className="mt-2">
+          <strong>Total:</strong> ${grandTotal.toFixed(2)}
+        </p>
+      </div>
     </div>
   );
 };

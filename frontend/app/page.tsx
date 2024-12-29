@@ -2,9 +2,10 @@
 
 import { Link } from "@nextui-org/link";
 import { button as buttonStyles } from "@nextui-org/theme";
+import { useEffect, useState } from "react";
+
 import { ProductsList } from "@/components/products";
 import { title, subtitle } from "@/components/primitives";
-import { useEffect, useState } from "react";
 import { getProducts } from "@/services/products";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       const data = await getProducts();
+
       setProducts(data);
     };
 

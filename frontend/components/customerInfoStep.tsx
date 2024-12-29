@@ -54,6 +54,39 @@ const CustomerInfoStep = ({
             <p className="text-red-500 text-sm">{errors.phone}</p>
           )}
         </div>
+        <div>
+          <input
+            className="border rounded px-3 py-2 w-full"
+            name="email"
+            placeholder="Correo electrónico"
+            type="email"
+            value={customerInfo.email}
+            onChange={(e) =>
+              setCustomerInfo({ ...customerInfo, email: e.target.value })
+            }
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
+        </div>
+        <div>
+          <select
+            className="border rounded px-3 py-2 w-full"
+            name="paymentMethod"
+            value={customerInfo.paymentMethod}
+            onChange={(e) =>
+              setCustomerInfo({
+                ...customerInfo,
+                paymentMethod: e.target.value,
+              })
+            }
+          >
+            <option value="creditCard">Tarjeta de crédito</option>
+          </select>
+          {errors.paymentMethod && (
+            <p className="text-red-500 text-sm">{errors.paymentMethod}</p>
+          )}
+        </div>
       </div>
     </div>
   );

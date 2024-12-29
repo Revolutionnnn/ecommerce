@@ -77,7 +77,6 @@ export class PaymentService {
       exp_year: cardInfo.expYear,
       card_holder: cardInfo.cardHolder,
     };
-
     try {
       const response = await axios.post(url, payload, {
         headers: {
@@ -85,14 +84,12 @@ export class PaymentService {
           'Content-Type': 'application/json',
         },
       });
-
       if (response.data.status !== 'CREATED') {
         throw new HttpException(
           `Error al obtener el token de la tarjeta: ${response.data.message}`,
           HttpStatus.BAD_REQUEST,
         );
       }
-
       return response.data.data.id;
     } catch (error) {
       throw new HttpException(
@@ -132,6 +129,7 @@ export class PaymentService {
     });
 
     let totalPago = 0;
+    const deliveryCost = 10000;
     for (const item of paymentRequest.cartItems) {
       const producto = await this.paymentRepository.getProductById(item.id);
 
@@ -149,7 +147,7 @@ export class PaymentService {
         );
       }
 
-      totalPago += producto.basePrice * item.quantity;
+      totalPago += producto.basePrice * item.quantity + deliveryCost;
     }
 
     const reference = uuidv4();
@@ -165,7 +163,7 @@ export class PaymentService {
       customer_email: paymentRequest.customerInfo.email,
       payment_method: {
         type: 'CARD',
-        installments: 1,
+        installments: paymentRequest.installments || 1,
         token: cardToken,
       },
     };
@@ -242,7 +240,7 @@ export class PaymentService {
       }
     } catch (error) {
       throw new HttpException(
-        `Error procesando el pago: ${error.response?.data?.message || error.message}`,
+        `${error.response?.data?.message || error.message}`,
         HttpStatus.BAD_REQUEST,
       );
     }

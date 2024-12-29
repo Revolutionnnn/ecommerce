@@ -19,7 +19,17 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  const [product, setProduct] = useState(null);
+  type Product = {
+    id: string;
+    reference: string;
+    titulo: string;
+    basePrice: number;
+    imagenUrl: string;
+    description: string;
+    cantidadStock: number;
+  };
+
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [reference, setReference] = useState<string | null>(null);
 
@@ -27,6 +37,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     const fetchParams = async () => {
       try {
         const resolvedParams = await params;
+
         setReference(resolvedParams.reference);
       } catch (error) {
         console.error("Error resolving params:", error);
@@ -43,6 +54,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
       try {
         setLoading(true);
         const data = await getProductById(reference);
+
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -76,6 +88,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
       alert(
         `No puedes agregar más de ${product.cantidadStock} unidades al carrito. Ya tienes ${currentQuantityInCart} en el carrito.`
       );
+
       return;
     }
     dispatch(
@@ -85,7 +98,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
         price: product.basePrice,
         quantity,
         image: product.imagenUrl,
-      })
+      }),
     );
   };
 
@@ -97,11 +110,13 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
             alt={product.titulo}
             className="rounded-lg"
             height={200}
-            src={product.imagenUrl || null}
+            src={product.imagenUrl || undefined}
             width={300}
           />
           <h1 className="text-3xl font-bold mt-4">{product.titulo}</h1>
-          <p className="text-gray-500 mt-2 text-center">{product.description}</p>
+          <p className="text-gray-500 mt-2 text-center">
+            {product.description}
+          </p>
           <p className="text-2xl font-semibold mt-4 text-primary">
             ${product.basePrice}
           </p>
@@ -139,8 +154,9 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
               onPress={() => {
                 const quantity = parseInt(
                   (document.getElementById("quantity") as HTMLInputElement)
-                    .value
+                    .value,
                 );
+
                 if (quantity > 0) {
                   handleAddToCart(quantity);
                 }
