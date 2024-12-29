@@ -49,6 +49,9 @@ export default function SummaryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [modalMessage, setModalMessage] = useState("Pendiente...");
 
+  const [acceptedPrivacyPolicy, setAcceptedPrivacyPolicy] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
   const total = cartItems.reduce(
     (sum, item) => sum + item.quantity * item.price,
     0,
@@ -119,6 +122,16 @@ export default function SummaryPage() {
     }
 
     if (activeStep === steps.length - 1) {
+      if (!acceptedPrivacyPolicy || !acceptedTerms) {
+        setErrors({
+          ...errors,
+          privacyPolicy:
+            "Debe aceptar la Política de Privacidad y los Términos y Condiciones.",
+        });
+
+        return;
+      }
+
       onOpen();
       setModalMessage("Procesando compra...");
 
@@ -195,6 +208,53 @@ export default function SummaryPage() {
         )}
       </div>
 
+      {activeStep === steps.length - 1 && (
+        <div className="mt-4">
+          <div className="flex items-center gap-2">
+            <input
+              checked={acceptedPrivacyPolicy}
+              id="privacyPolicy"
+              type="checkbox"
+              onChange={(e) => setAcceptedPrivacyPolicy(e.target.checked)}
+            />
+            <label className="text-sm" htmlFor="privacyPolicy">
+              <a
+                className="text-blue-500"
+                href="https://wompi.com/assets/downloadble/autorizacion-administracion-datos-personales.pdf"
+                rel="noreferrer"
+                target="_blank"
+              >
+                I authorize the handling of my personal data. Read our Privacy
+                Policy.
+              </a>
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2 mt-2">
+            <input
+              checked={acceptedTerms}
+              id="termsAndConditions"
+              type="checkbox"
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+            />
+            <label className="text-sm" htmlFor="termsAndConditions">
+              <a
+                className="text-blue-500"
+                href="https://wompi.com/assets/downloadble/reglamento-Usuarios-Colombia.pdf"
+                rel="noreferrer"
+                target="_blank"
+              >
+                I accept the Terms and Conditions.
+              </a>
+            </label>
+          </div>
+
+          {errors.privacyPolicy && (
+            <p className="text-red-500 text-sm mt-2">{errors.privacyPolicy}</p>
+          )}
+        </div>
+      )}
+
       <div className="flex justify-between mt-6">
         <Button
           color="primary"
@@ -204,7 +264,12 @@ export default function SummaryPage() {
         >
           Atrás
         </Button>
-        <Button color="success" variant="shadow" onPress={handleNext}>
+        <Button
+          color="success"
+          disabled={!acceptedTerms || !acceptedPrivacyPolicy}
+          variant="shadow"
+          onPress={handleNext}
+        >
           {activeStep === steps.length - 1 ? "Confirmar Compra" : "Siguiente"}
         </Button>
       </div>

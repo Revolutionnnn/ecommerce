@@ -17,18 +17,12 @@ export async function makePayment(
     if (response.ok) {
       return { success: true, message: "Compra realizada con éxito!" };
     } else {
-      const errorData = await response.json();
-
-      console.error("Error en la respuesta:", errorData);
-
       return {
         success: false,
         message: "Hubo un problema al procesar la compra.",
       };
     }
   } catch (error) {
-    console.error("Error en el servidor:", error);
-
     return {
       success: false,
       message: "Hubo un problema con la conexión al servidor.",
