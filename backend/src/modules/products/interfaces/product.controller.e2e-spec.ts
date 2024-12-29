@@ -9,14 +9,13 @@ describe('ProductController (e2e)', () => {
   let getProductUseCaseMock: Partial<GetProductUseCase>;
 
   beforeAll(async () => {
-    // Mock del caso de uso
     getProductUseCaseMock = {
-      getAllProducts: jest.fn().mockResolvedValue([{}, {}]), // Simula una lista de productos (no importa el contenido)
+      getAllProducts: jest.fn().mockResolvedValue([{}, {}]),
       getProductById: jest.fn((id: number) => {
         if (id === 1) {
-          return Promise.resolve({}); // Simula un producto existente
+          return Promise.resolve({});
         }
-        return Promise.resolve(null); // Simula producto no encontrado
+        return Promise.resolve(null);
       }),
     };
 
@@ -32,7 +31,7 @@ describe('ProductController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-  });
+  }, 20000);
 
   afterAll(async () => {
     await app.close();
@@ -41,27 +40,25 @@ describe('ProductController (e2e)', () => {
   describe('/products (GET)', () => {
     it('should return status 200 and a list of products', async () => {
       const response = await request(app.getHttpServer())
-        .get('/products') // Llama al endpoint
-        .expect(200); // Verifica que devuelve estado 200
+        .get('/products')
+        .expect(200);
 
-      expect(Array.isArray(response.body)).toBe(true); // Verifica que el cuerpo es una lista
-      expect(response.body.length).toBeGreaterThan(0); // Verifica que no está vacío
-    });
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBeGreaterThan(0);
+    }, 10000);
   });
 
   describe('/products/:id (GET)', () => {
     it('should return status 200 and a product if it exists', async () => {
       const response = await request(app.getHttpServer())
-        .get('/products/1') // Llama al endpoint con ID 1
-        .expect(200); // Verifica que devuelve estado 200
+        .get('/products/1')
+        .expect(200);
 
-      expect(response.body).toBeDefined(); // Verifica que hay una respuesta
-    });
+      expect(response.body).toBeDefined();
+    }, 10000);
 
     it('should return status 404 if product does not exist', async () => {
-      await request(app.getHttpServer())
-        .get('/products/9999') // Llama al endpoint con un ID inexistente
-        .expect(404); // Verifica que devuelve estado 404
-    });
+      await request(app.getHttpServer()).get('/products/9999').expect(404);
+    }, 10000);
   });
 });

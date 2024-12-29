@@ -5,6 +5,7 @@ import {
   IsString,
   Length,
   Matches,
+  IsOptional,
 } from 'class-validator';
 
 class CustomerInfoDto {
@@ -66,8 +67,9 @@ export class PaymentRequestDto {
   })
   cvc: string;
 
-  @IsNotEmpty()
-  installments: number;
+  @IsOptional()
+  @IsNumber({}, { message: 'El número de cuotas debe ser un número' })
+  installments?: number;
 
   @IsNotEmpty()
   customerInfo: CustomerInfoDto;

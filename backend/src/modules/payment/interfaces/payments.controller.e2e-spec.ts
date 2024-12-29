@@ -55,6 +55,7 @@ describe('PaymentController (e2e)', () => {
         expMonth: '12',
         expYear: '25',
         cvc: '123',
+        installments: 1,
         customerInfo: {
           name: 'John Doe',
           address: '123 Main St',
@@ -75,7 +76,9 @@ describe('PaymentController (e2e)', () => {
         paymentId: 123,
         ...paymentRequest,
       });
-      expect(mockPaymentService.processPayment).toHaveBeenCalledWith(paymentRequest);
+      expect(mockPaymentService.processPayment).toHaveBeenCalledWith(
+        paymentRequest,
+      );
     });
 
     it('should return 400 if payment data is invalid', async () => {
