@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
+  baseUrl: "http://3.12.114.18/api/",
 };
 
 export default config;
