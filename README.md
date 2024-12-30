@@ -5,7 +5,7 @@ Sigue estos pasos para configurar y ejecutar el proyecto correctamente:
 ---
 
 ```env
-Crea un archivo `.env` en la raíz del proyecto y define las siguientes variables de entorno:
+Crea un archivo `.env` en la carpeta del backend proyecto y define las siguientes variables de entorno:
 WOMPI_API_BASE_URL=     # URL base para la API de Wompi
 WOMPI_PUBLIC_KEY=       # Llave pública de Wompi
 WOMPI_INTEGRITY_KEY=    # Llave de integridad de Wompi
