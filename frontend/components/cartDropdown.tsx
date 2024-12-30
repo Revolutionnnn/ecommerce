@@ -17,8 +17,8 @@ export const CartDropdown = () => {
   const cartItemsFromRedux = useSelector(
     (state: RootState) => state.cart.items
   );
-  const [cartItems, setCartItems] = useState<any[] | null>(null);
-  const [isOpen, setIsOpen] = useState(false); // Usamos el estado aquí
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setCartItems(cartItemsFromRedux);
