@@ -12,31 +12,5 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: nest_js
-    depends_on:
-      - database
-    environment:
-      DATABASE_URL: postgres://myuser:mypassword@database:5432/mydatabase
-    ports:
-      - "3000:3000"
-    command: ["npm", "run", "start:dev"]
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: nextjs_app
-    depends_on:
-      - backend
-    ports:
-      - "3001:3000"
-    environment:
-      NODE_ENV: production
-    command: ["npm", "run", "dev"]
-
 volumes:
   postgres_data:
