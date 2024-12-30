@@ -26,9 +26,11 @@ Para iniciar el proyecto, usa:
 docker-compose up
 
 Una vez que el backend esté funcionando, entra en la carpeta del backend y ejecuta las migraciones:
+cd backend
 npx prisma migrate dev
 
 Ejecuta el script seed.ts para insertar los productos base en la base de datos:
+cd prisma
 npx ts-node --transpile-only seed.ts
 
 ## Puertos del Proyecto
