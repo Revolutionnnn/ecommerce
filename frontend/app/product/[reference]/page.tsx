@@ -25,7 +25,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     titulo: string;
     basePrice: number;
     imagenUrl: string;
-    description: string;
+    descripcion: string;
     cantidadStock: number;
   };
 
@@ -106,7 +106,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
     <div className="flex flex-col items-center gap-6 py-10 px-4">
       <Card className="w-full max-w-lg shadow-lg">
         <CardBody className="flex flex-col items-center">
-        <Image
+          <Image
             alt={product.titulo}
             className="rounded-lg"
             height={200}
@@ -115,7 +115,7 @@ export default function ProductDetails({ params }: ProductDetailsProps) {
           />
           <h1 className="text-3xl font-bold mt-4">{product.titulo}</h1>
           <p className="text-gray-500 mt-2 text-center">
-            {product.description}
+            {product.descripcion}
           </p>
           <p className="text-2xl font-semibold mt-4 text-primary">
             ${product.basePrice}

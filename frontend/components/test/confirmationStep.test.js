@@ -1,6 +1,6 @@
-// __tests__/ConfirmationStep.test.tsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
+
 import ConfirmationStep from "../confirmationStep";
 
 describe("ConfirmationStep", () => {
@@ -13,13 +13,9 @@ describe("ConfirmationStep", () => {
     const mockTotal = 50000;
 
     render(
-      <ConfirmationStep
-        customerInfo={mockCustomerInfo}
-        total={mockTotal}
-      />
+      <ConfirmationStep customerInfo={mockCustomerInfo} total={mockTotal} />,
     );
 
-    // Verificar que se muestren los datos del cliente
     expect(screen.getByText("Nombre:")).toBeInTheDocument();
     expect(screen.getByText("John Doe")).toBeInTheDocument();
 
@@ -29,7 +25,6 @@ describe("ConfirmationStep", () => {
     expect(screen.getByText("Teléfono:")).toBeInTheDocument();
     expect(screen.getByText("123-456-7890")).toBeInTheDocument();
 
-    // Verificar que se muestren los cálculos correctamente
     expect(screen.getByText("Subtotal:")).toBeInTheDocument();
     expect(screen.getByText("$50000.00")).toBeInTheDocument();
 
