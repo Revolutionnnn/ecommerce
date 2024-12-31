@@ -1,6 +1,6 @@
-// __tests__/CustomerInfoStep.test.tsx
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+
 import CustomerInfoStep from "../customerInfoStep";
 
 describe("CustomerInfoStep", () => {
@@ -14,16 +14,17 @@ describe("CustomerInfoStep", () => {
           email: "",
           paymentMethod: "creditCard",
         }}
-        setCustomerInfo={jest.fn()}
         errors={{}}
-      />
+        setCustomerInfo={jest.fn()}
+      />,
     );
 
-    // Verifica que todos los campos estén presentes
     expect(screen.getByPlaceholderText("Nombre completo")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Dirección")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Teléfono")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Correo electrónico")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Correo electrónico"),
+    ).toBeInTheDocument();
     expect(screen.getByRole("combobox")).toBeInTheDocument();
   });
 
@@ -37,7 +38,6 @@ describe("CustomerInfoStep", () => {
           email: "",
           paymentMethod: "creditCard",
         }}
-        setCustomerInfo={jest.fn()}
         errors={{
           name: "El nombre es requerido",
           address: "La dirección es requerida",
@@ -45,15 +45,19 @@ describe("CustomerInfoStep", () => {
           email: "El correo electrónico es requerido",
           paymentMethod: "El método de pago es requerido",
         }}
-      />
+        setCustomerInfo={jest.fn()}
+      />,
     );
 
-    // Verifica que los mensajes de error se muestren
     expect(screen.getByText("El nombre es requerido")).toBeInTheDocument();
     expect(screen.getByText("La dirección es requerida")).toBeInTheDocument();
     expect(screen.getByText("El teléfono es requerido")).toBeInTheDocument();
-    expect(screen.getByText("El correo electrónico es requerido")).toBeInTheDocument();
-    expect(screen.getByText("El método de pago es requerido")).toBeInTheDocument();
+    expect(
+      screen.getByText("El correo electrónico es requerido"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("El método de pago es requerido"),
+    ).toBeInTheDocument();
   });
 
   test("calls setCustomerInfo on input changes", () => {
@@ -68,12 +72,11 @@ describe("CustomerInfoStep", () => {
           email: "",
           paymentMethod: "creditCard",
         }}
-        setCustomerInfo={mockSetCustomerInfo}
         errors={{}}
-      />
+        setCustomerInfo={mockSetCustomerInfo}
+      />,
     );
 
-    // Simula cambios en los inputs
     fireEvent.change(screen.getByPlaceholderText("Nombre completo"), {
       target: { value: "John Doe" },
     });
