@@ -1,4 +1,4 @@
-# Documentación para Correr el Proyecto
+# Documentación para Correr el Proyecto ecommerce con Wompi pasarela de pago
 
 Sigue estos pasos para configurar y ejecutar el proyecto correctamente:
 
