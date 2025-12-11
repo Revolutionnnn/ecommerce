@@ -1,7 +1,3 @@
-# Página web en producción
-[Ir a la página web en producción](http://3.12.114.18/)
-
-
 # Documentación para Correr el Proyecto
 
 Sigue estos pasos para configurar y ejecutar el proyecto correctamente:
